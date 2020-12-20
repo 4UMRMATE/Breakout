@@ -338,7 +338,7 @@ function checkForObject(elem, BALL_DIRECTION) {
  */
 
 function gameWon() {
-  gameWinSound = new WebImage("./sounds/game");
+  gameWinSound = new WebImage("./sounds/youWin.mp3");
   gameWinSound.play();
   stopTimer(animateBall);
   remove(ball);
