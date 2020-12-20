@@ -1,25 +1,39 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 .wrapper {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  align-items: center;
   width: 100%;
   height: 100%;
+  background-color: black;
 }
+
+.game-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  width: 800px;
+  height: 100vh;
+}
+
 .header {
   position: relative;
   height: 5%;
 }
 .cover {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-color: transparent;
-  z-index: 3;
+  display: block;
+  margin: 0 auto;
 }
 canvas {
   position: sticky;
   left: 28.5%;
-  border: 2px solid black;
+  border: 1px solid whitesmoke;
   display: inline-block;
   vertical-align: top;
   z-index: 3;
@@ -34,16 +48,4 @@ pre {
 h1 {
   text-align: center;
   z-index: -3;
-}
-.commentator-box {
-  width: 100%;
-  position: relative;
-  height: 5%;
-}
-.comment {
-  width: 100%;
-  height: 25px;
-  font-size: 20px;
-  text-align: center;
-  font-weight: bolder;
 }

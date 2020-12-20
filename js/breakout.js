@@ -1,12 +1,11 @@
 var CANVAS_WIDTH = 800;
 var CANVAS_HEIGHT = 800;
-
 /* Constants for bricks */
-var NUM_ROWS = 12;
+var NUM_ROWS = 8;
 var BRICK_TOP_OFFSET = 15;
 var BRICK_SPACING = 2;
 var NUM_BRICKS_PER_ROW = 10;
-var BRICK_HEIGHT = CANVAS_HEIGHT / 60;
+var BRICK_HEIGHT = CANVAS_HEIGHT / 50;
 var SPACE_FOR_BRICKS = CANVAS_WIDTH - (NUM_BRICKS_PER_ROW + 1) * BRICK_SPACING;
 var BRICK_WIDTH = SPACE_FOR_BRICKS / NUM_BRICKS_PER_ROW;
 
@@ -21,11 +20,11 @@ var BALL_COLOR = "#FFFFFF";
 var PADDLE_COLOR = "#FFFFFF";
 var BACKGROUND_COLOR = "#000000";
 /* Ball Movement Parameters */
-var BALL_DX = 2;
-var BALL_DY = 2;
-var speed = 2;
-var starting_dx = 2;
-var starting_dy = 2;
+var BALL_DX = 2.5;
+var BALL_DY = 2.5;
+var speed = 2.5;
+var starting_dx = 2.5;
+var starting_dy = 2.5;
 
 /* Main Objects */
 
@@ -112,19 +111,13 @@ function enterMainMenu() {
 
 function drawMenu() {
   /* Background */
-  menuBackground = new WebImage(
-    "https://codehs.com/uploads/" + "a311e3382c4bad80d137da6a61da41a6"
-  );
+  menuBackground = new WebImage("./images/background.png");
   menuBackground.setSize(getWidth(), getHeight());
   add(menuBackground);
 
-  buttonClickSound = new Audio(
-    "https://codehs.com/uploads/41656f5626d6bc6dffada3babb0ce069"
-  );
+  buttonClickSound = new Audio("./sounds/clickSound.wav");
 
-  playButtonSound = new Audio(
-    "https://codehs.com/uploads/02f256c9fce6a2b3ee1332620e55c27a"
-  );
+  playButtonSound = new Audio("./sounds/play.mp3");
 
   // Game Title
   drawBoxWithTitle(TITLE_HEIGHT, "Breakout By .MS.", "20pt Monaco");
@@ -134,7 +127,7 @@ function drawMenu() {
     MENU_BUTTONS_X,
     MENU_BUTTONS_Y,
     "PLAY",
-    MENU_BUTTONS_X + MENU_BUTTONS_WIDTH / 4,
+    getWidth() / 2 - MENU_BUTTONS_WIDTH / 8,
     MENU_BUTTONS_Y + MENU_BUTTONS_HEIGHT / 2 + MENU_SPACING,
     "20pt Monaco"
   );
@@ -142,8 +135,11 @@ function drawMenu() {
     MENU_BUTTONS_X,
     MENU_BUTTONS_Y + MENU_BUTTONS_HEIGHT + MENU_SPACING,
     "SETTINGS",
-    MENU_BUTTONS_X + MENU_SPACING,
-    MENU_BUTTONS_Y + MENU_BUTTONS_HEIGHT + MENU_SPACING * 8,
+    getWidth() / 2 - menuButtonText.getWidth(),
+    MENU_BUTTONS_Y +
+      MENU_BUTTONS_HEIGHT +
+      MENU_SPACING +
+      MENU_BUTTONS_HEIGHT / 2,
     "20pt Monaco"
   );
 }
@@ -205,8 +201,6 @@ function play() {
   removeAll();
   addBackground(Color.white);
 
-  keyDownMethod(keyboardShortcuts);
-
   // Game Details
   updateDetails();
   updateLives();
@@ -255,23 +249,16 @@ function updateDetails() {
 
 function updateLives() {
   if (LIVES_LEFT == 3) {
-    livesBox1 = new WebImage(
-      "https://codehs.com/uploads/5c156396a3a8b8ad6bd0eab5ffa18703"
-    );
+    livesBox1 = new WebImage("./images/Live.png");
     livesBox1.setSize(15, 15);
     var LIVES_WIDTH = livesBox1.getWidth();
-    var LIVES_HEIGHT = livesBox1.getHeight();
     livesBox1.setPosition((getWidth() - LIVES_WIDTH) / 2 - LIVES_WIDTH, 0);
     add(livesBox1);
-    livesBox2 = new WebImage(
-      "https://codehs.com/uploads/5c156396a3a8b8ad6bd0eab5ffa18703"
-    );
+    livesBox2 = new WebImage("./images/Live.png");
     livesBox2.setSize(15, 15);
     livesBox2.setPosition((getWidth() - LIVES_WIDTH) / 2, 0);
     add(livesBox2);
-    livesBox3 = new WebImage(
-      "https://codehs.com/uploads/5c156396a3a8b8ad6bd0eab5ffa18703"
-    );
+    livesBox3 = new WebImage("./images/Live.png");
     livesBox3.setSize(15, 15);
     livesBox3.setPosition((getWidth() - LIVES_WIDTH) / 2 + LIVES_WIDTH, 0);
     add(livesBox3);
@@ -351,9 +338,7 @@ function checkForObject(elem, BALL_DIRECTION) {
  */
 
 function gameWon() {
-  gameWinSound = new Audio(
-    "https://codehs.com/uploads/" + "945c66ecf6cf7b60b6391edf9e0e342b"
-  );
+  gameWinSound = new WebImage("./sounds/game");
   gameWinSound.play();
   stopTimer(animateBall);
   remove(ball);
@@ -369,9 +354,7 @@ function gameWon() {
 }
 
 function gameOver() {
-  gameOverSound = new Audio(
-    "https://codehs.com/uploads/" + "01040672a760cb522fd6e714b5eccc2a"
-  );
+  gameOverSound = new Audio("./sounds/gameOver.mp3");
   pausedSound.pause();
   gameOverSound.play();
   stopTimer(animateBall);
@@ -388,9 +371,7 @@ function gameOver() {
 }
 
 function resetGame() {
-  pausedSound = new Audio(
-    "https://codehs.com/uploads/" + "aad002387ca64dc94a390d656045be34"
-  );
+  pausedSound = new Audio("./sounds/gamePause.wav");
   pausedSound.play();
 
   --LIVES_LEFT;
@@ -413,6 +394,8 @@ function updateGameState() {
     remove(hint);
     drawBall(Randomizer.nextColor());
     setTimer(animateBall, 0);
+    var gameReset = new Audio("./sounds/gameReset.mp3");
+    gameReset.play();
     GAME_PAUSED = false;
   }
   if (GAME_OVER) {
@@ -451,16 +434,6 @@ function drawPaddle() {
   paddle.setColor(PADDLE_COLOR);
   paddle.setPosition(getWidth() / 2 - PADDLE_WIDTH / 2, PADDLE_Y);
   add(paddle);
-}
-
-function bounceOfPaddle() {
-  if (
-    ball.getY() + BALL_RADIUS > paddle.getY() &&
-    ball.getX() + BALL_RADIUS > paddle.getX() &&
-    ball.getX() - BALL_RADIUS < paddle.getX() + PADDLE_WIDTH
-  ) {
-    BALL_DY = -BALL_DY;
-  }
 }
 
 function checkWalls() {
@@ -642,21 +615,10 @@ function buttonClicked() {
 }
 
 function playBackgroundSound() {
-  backgroundSound = new Audio(
-    "https://codehs.com/uploads/1dd7ca043b65bcae952bc2981f589ec0"
-  );
+  backgroundSound = new Audio("./sounds/background.mp3");
   if (SOUNDS_ON) {
     backgroundSound.play();
     backgroundSound.loop = true;
-  }
-}
-
-// Cheat Code XD
-function keyboardShortcuts(e) {
-  if (e.keyCode == Keyboard.letter("P")) {
-    SCORE += 10;
-    updateDetails();
-    println("+10 Score");
   }
 }
 
